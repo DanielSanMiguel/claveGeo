@@ -1,15 +1,37 @@
 import streamlit as st
 import pandas as pd
 
-# URL del archivo raw en GitHub
-url_github = 'https://raw.githubusercontent.com/DanielSanMiguel/claveGeo/main/videos.json'
+# URLs de los archivos JSON fragmentados en GitHub
+urls_github = [
+    'https://raw.githubusercontent.com/DanielSanMiguel/claveGeo/main/videos_parte_1.json',
+    'https://raw.githubusercontent.com/DanielSanMiguel/claveGeo/main/videos_parte_2.json'
+    # Puedes añadir más archivos si lo necesitas, por ejemplo:
+    # 'https://raw.githubusercontent.com/DanielSanMiguel/claveGeo/main/videos_parte_3.json'
+]
+
+# Título de la aplicación
+st.title('🖤 Buscador Clave Geo 🏴‍☠️')
+st.markdown('---')
 
 # Cargar los datos desde GitHub
+dataframes = []
+error_loading = False
+loading_message = st.info('Surcando los mares.')
+
 try:
-    df = pd.read_json(url_github)
-    st.success('Surcando los mares.')
+    for url in urls_github:
+        df_temp = pd.read_json(url)
+        dataframes.append(df_temp)
+    
+    # Combinar todos los DataFrames en uno solo
+    df = pd.concat(dataframes, ignore_index=True)
+    loading_message.success('Datos cargados y combinados correctamente desde GitHub.')
+    
 except Exception as e:
-    st.error(f'Error al cargar los datos: {e}')
+    loading_message.error(f'Error al cargar los datos: {e}')
+    error_loading = True
+
+if error_loading:
     st.stop()
 
 # --- Manejo de la columna 'enlace' ---
@@ -18,10 +40,6 @@ if 'enlace' not in df.columns:
     st.error('Error: La columna "enlace" no se encuentra en el archivo JSON. Por favor, revisa el archivo en GitHub.')
     st.stop()
 # -------------------------------------
-
-# Título de la aplicación
-st.title('🖤 Buscador Clave Geo 🏴‍☠️')
-st.markdown('---')
 
 # Campo de búsqueda
 busqueda = st.text_input('Escribe palabras clave a buscar en los videos:', '')
@@ -60,6 +78,8 @@ if busqueda:
                 st.markdown('---')
     else:
         st.info('No se encontraron videos con ese contenido.')
+
+
 
 
 

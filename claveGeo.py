@@ -30,7 +30,7 @@ busqueda = st.text_input('Escribe lo que quieres buscar en los videos:', '')
 if busqueda:
     # Buscar en las columnas 'resumen' y 'transcripcion'
     resultados = df[
-        df['resumen'].str.contains(busqueda, case=False, na=False) |
+        #df['resumen'].str.contains(busqueda, case=False, na=False) |
         df['transcripción'].str.contains(busqueda, case=False, na=False)
     ]
 
@@ -44,4 +44,5 @@ if busqueda:
     else:
 
         st.info('No se encontraron videos con ese contenido.')
+
 

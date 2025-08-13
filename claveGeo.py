@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Aug 13 08:55:54 2025
-
-@author: dsanm
-"""
-
 import streamlit as st
 import pandas as pd
 
@@ -26,25 +19,35 @@ st.markdown('---')
 # Campo de búsqueda
 busqueda = st.text_input('Escribe lo que quieres buscar en los videos:', '')
 
-# Lógica de búsqueda
+# Lógica de búsqueda mejorada
 if busqueda:
-    # Buscar en las columnas 'resumen' y 'transcripcion'
-    resultados = df[
-        #df['resumen'].str.contains(busqueda, case=False, na=False) |
-        df['transcripcion'].str.contains(busqueda, case=False, na=False)
-    ]
+    # Convertir la búsqueda a minúsculas y dividir por espacios
+    palabras_busqueda = busqueda.lower().split()
+
+    # Iniciar un filtro que será True para todos los videos
+    filtro_general = pd.Series([True] * len(df), index=df.index)
+
+    # Iterar sobre cada palabra para construir el filtro
+    for palabra in palabras_busqueda:
+        # El filtro se actualiza con una condición 'Y' (&)
+        # para asegurar que todas las palabras estén presentes
+        filtro_general &= (
+            #df['resumen'].str.lower().str.contains(palabra, na=False) |
+            df['transcripcion'].str.lower().str.contains(palabra, na=False)
+        )
+
+    # Aplicar el filtro al DataFrame
+    resultados = df[filtro_general]
 
     if not resultados.empty:
-        st.subheader(f'Videos que coinciden con "{busqueda}":')
+        st.subheader(f'Videos que contienen todas las palabras de "{busqueda}":')
         # Mostrar los resultados
         for index, row in resultados.iterrows():
             st.write(f"**Título:** {row['titulo']}")
             #st.write(f"**Enlace:** [Ver video]({row['enlace']})")
             st.markdown('---')
     else:
-
         st.info('No se encontraron videos con ese contenido.')
-
 
 
 

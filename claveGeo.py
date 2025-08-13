@@ -3,10 +3,10 @@ import pandas as pd
 
 # URLs de los archivos JSON fragmentados en GitHub
 urls_github = [
+    # Puedes añadir más archivos si lo necesitas
     'https://raw.githubusercontent.com/DanielSanMiguel/claveGeo/main/videos_parte_1.json',
-    'https://raw.githubusercontent.com/DanielSanMiguel/claveGeo/main/videos_parte_2.json'
-    # Puedes añadir más archivos si lo necesitas, por ejemplo:
-    # 'https://raw.githubusercontent.com/DanielSanMiguel/claveGeo/main/videos_parte_3.json'
+    'https://raw.githubusercontent.com/DanielSanMiguel/claveGeo/main/videos_parte_2.json',
+    'https://raw.githubusercontent.com/DanielSanMiguel/claveGeo/main/videos_parte_3.json'
 ]
 
 # Título de la aplicación
@@ -78,6 +78,7 @@ if busqueda:
                 st.markdown('---')
     else:
         st.info('No se encontraron videos con ese contenido.')
+
 
 
 

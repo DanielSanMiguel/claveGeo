@@ -7,7 +7,7 @@ url_github = 'https://raw.githubusercontent.com/DanielSanMiguel/claveGeo/main/vi
 # Cargar los datos desde GitHub
 try:
     df = pd.read_json(url_github)
-    st.success('Datos cargados correctamente desde GitHub.')
+    st.success('Surcando los mares.')
 except Exception as e:
     st.error(f'Error al cargar los datos: {e}')
     st.stop()
@@ -60,5 +60,6 @@ if busqueda:
                 st.markdown('---')
     else:
         st.info('No se encontraron videos con ese contenido.')
+
 
 

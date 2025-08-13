@@ -3,7 +3,7 @@ import pandas as pd
 
 # URLs de los archivos JSON fragmentados en GitHub
 urls_github = [
-    # Puedes añadir más archivos si lo necesitas
+    # Puedes añadir más archivos si lo necesitas, por ejemplo:
     'https://raw.githubusercontent.com/DanielSanMiguel/claveGeo/main/videos_parte_1.json',
     'https://raw.githubusercontent.com/DanielSanMiguel/claveGeo/main/videos_parte_2.json',
     'https://raw.githubusercontent.com/DanielSanMiguel/claveGeo/main/videos_parte_3.json'
@@ -13,25 +13,29 @@ urls_github = [
 st.title('🖤 Buscador Clave Geo 🏴‍☠️')
 st.markdown('---')
 
-# Cargar los datos desde GitHub
-dataframes = []
-error_loading = False
-loading_message = st.info('Surcando los mares.')
-
-try:
-    for url in urls_github:
+# La función de carga de datos ahora usa caché para mejorar el rendimiento
+@st.cache_data
+def load_data(urls):
+    """
+    Carga y combina los datos de múltiples URLs JSON usando caché.
+    """
+    dataframes = []
+    for url in urls:
         df_temp = pd.read_json(url)
         dataframes.append(df_temp)
     
     # Combinar todos los DataFrames en uno solo
     df = pd.concat(dataframes, ignore_index=True)
+    return df
+
+# Cargar los datos desde GitHub con un mensaje de estado
+loading_message = st.info('Surcando los mares... 🏴‍☠️')
+
+try:
+    df = load_data(urls_github)
     loading_message.success('Datos cargados y combinados correctamente desde GitHub.')
-    
 except Exception as e:
     loading_message.error(f'Error al cargar los datos: {e}')
-    error_loading = True
-
-if error_loading:
     st.stop()
 
 # --- Manejo de la columna 'enlace' ---
@@ -78,9 +82,3 @@ if busqueda:
                 st.markdown('---')
     else:
         st.info('No se encontraron videos con ese contenido.')
-
-
-
-
-
-

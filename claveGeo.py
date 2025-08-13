@@ -12,6 +12,13 @@ except Exception as e:
     st.error(f'Error al cargar los datos: {e}')
     st.stop()
 
+# --- Manejo de la columna 'enlace' ---
+# Si la columna 'enlace' no existe en absoluto, detenemos la app
+if 'enlace' not in df.columns:
+    st.error('Error: La columna "enlace" no se encuentra en el archivo JSON. Por favor, revisa el archivo en GitHub.')
+    st.stop()
+# -------------------------------------
+
 # Título de la aplicación
 st.title('🔎 Buscador de videos de YouTube')
 st.markdown('---')
@@ -21,34 +28,35 @@ busqueda = st.text_input('Escribe lo que quieres buscar en los videos:', '')
 
 # Lógica de búsqueda mejorada
 if busqueda:
-    # Convertir la búsqueda a minúsculas y dividir por espacios
     palabras_busqueda = busqueda.lower().split()
-
-    # Iniciar un filtro que será True para todos los videos
     filtro_general = pd.Series([True] * len(df), index=df.index)
 
-    # Iterar sobre cada palabra para construir el filtro
-    for palabra in palabras_busqueda:
-        # El filtro se actualiza con una condición 'Y' (&)
-        # para asegurar que todas las palabras estén presentes
-        filtro_general &= (
-            #df['resumen'].str.lower().str.contains(palabra, na=False) |
-            df['transcripcion'].str.lower().str.contains(palabra, na=False)
-        )
+    # Prevenir KeyError si las columnas no existen
+    if 'transcripcion' in df.columns:
+        for palabra in palabras_busqueda:
+            filtro_general &= (
+                df['transcripcion'].str.lower().str.contains(palabra, na=False)
+            )
+    else:
+        st.warning('La columna "transcripcion" no existe para realizar la búsqueda.')
+        resultados = pd.DataFrame() # DataFrame vacío
 
-    # Aplicar el filtro al DataFrame
-    resultados = df[filtro_general]
+    if 'transcripcion' in df.columns:
+        resultados = df[filtro_general]
+    else:
+        resultados = pd.DataFrame()
 
     if not resultados.empty:
         st.subheader(f'Videos que contienen todas las palabras de "{busqueda}":')
         # Mostrar los resultados
         for index, row in resultados.iterrows():
-            st.write(f"**Título:** {row['titulo']}")
-            st.write(f"**Enlace:** [Ver video]({row['enlace']})")
-            st.markdown('---')
+            # Añado una verificación para asegurar que la clave 'enlace' exista en esta fila
+            if 'enlace' in row and 'titulo' in row:
+                st.write(f"**Título:** {row['titulo']}")
+                st.write(f"**Enlace:** [Ver video]({row['enlace']})")
+                st.markdown('---')
+            else:
+                st.warning(f"Se encontró un resultado sin la información completa en el índice: {index}")
+                st.markdown('---')
     else:
         st.info('No se encontraron videos con ese contenido.')
-
-
-
-

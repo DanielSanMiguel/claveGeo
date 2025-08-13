@@ -31,7 +31,7 @@ if busqueda:
     # Buscar en las columnas 'resumen' y 'transcripcion'
     resultados = df[
         df['resumen'].str.contains(busqueda, case=False, na=False) |
-        df['transcripcion'].str.contains(busqueda, case=False, na=False)
+        df['transcripción'].str.contains(busqueda, case=False, na=False)
     ]
 
     if not resultados.empty:
@@ -39,8 +39,9 @@ if busqueda:
         # Mostrar los resultados
         for index, row in resultados.iterrows():
             st.write(f"**Título:** {row['titulo']}")
-            st.write(f"**Enlace:** [Ver video]({row['enlace']})")
+            #st.write(f"**Enlace:** [Ver video]({row['enlace']})")
             st.markdown('---')
     else:
 
         st.info('No se encontraron videos con ese contenido.')
+

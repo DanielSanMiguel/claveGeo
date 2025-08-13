@@ -24,7 +24,7 @@ st.title('🔎 Buscador de videos de YouTube')
 st.markdown('---')
 
 # Campo de búsqueda
-busqueda = st.text_input('Escribe lo que quieres buscar en los videos:', '')
+busqueda = st.text_input('Escribe palabras clave a buscar en los videos:', '')
 
 # Lógica de búsqueda mejorada
 if busqueda:
@@ -60,3 +60,4 @@ if busqueda:
                 st.markdown('---')
     else:
         st.info('No se encontraron videos con ese contenido.')
+

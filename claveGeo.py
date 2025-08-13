@@ -9,7 +9,7 @@ import streamlit as st
 import pandas as pd
 
 # URL del archivo raw en GitHub
-url_github = 'https://raw.githubusercontent.com/tu-usuario/tu-repo/main/videos.json'
+url_github = 'https://raw.githubusercontent.com/DanielSanMiguel/claveGeo/main/videos.json'
 
 # Cargar los datos desde GitHub
 try:
@@ -42,4 +42,5 @@ if busqueda:
             st.write(f"**Enlace:** [Ver video]({row['enlace']})")
             st.markdown('---')
     else:
+
         st.info('No se encontraron videos con ese contenido.')

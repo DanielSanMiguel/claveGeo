@@ -20,7 +20,7 @@ if 'enlace' not in df.columns:
 # -------------------------------------
 
 # Título de la aplicación
-st.title('🔎 Buscador de videos de YouTube')
+st.title('🖤 Buscador Clave Geo 🏴‍☠️')
 st.markdown('---')
 
 # Campo de búsqueda
@@ -60,4 +60,5 @@ if busqueda:
                 st.markdown('---')
     else:
         st.info('No se encontraron videos con ese contenido.')
+
 

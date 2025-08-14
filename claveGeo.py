@@ -76,9 +76,11 @@ if busqueda:
             if 'enlace' in row and 'titulo' in row:
                 st.write(f"**Título:** {row['titulo']}")
                 st.write(f"**Enlace:** [Ver video]({row['enlace']})")
+                st.write(f"**Resumen:** {row['resumen']}")
                 st.markdown('---')
             else:
                 st.warning(f"Se encontró un resultado sin la información completa en el índice: {index}")
                 st.markdown('---')
     else:
         st.info('No se encontraron videos con ese contenido.')
+
